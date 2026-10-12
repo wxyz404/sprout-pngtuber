@@ -1,6 +1,6 @@
 {
   "name": "sprout-pngtuber",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "private": true,
   "description": "Local webcam-driven PNG avatar studio",
   "author": "Sprout",

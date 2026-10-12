@@ -1,6 +1,6 @@
 # Sprout — local PNGtuber studio
 
-Previously named Luma. Sprout v0.3.4 repairs installer upgrades by replacing application files in place. It includes the v0.3.3 sideways-nod correction and independent avatar mirror switch, plus complete center, left, and right artwork banks in both rig modes.
+Previously named Luma. Sprout v0.4.0 adds cartoon animation: body squash/stretch, springy head and accessory follow-through, facial overlap, and expression accents. It retains the installer upgrade repair, sideways-nod correction, avatar mirroring, and complete center/left/right artwork banks.
 
 Sprout turns ordinary webcam movements into a PNG avatar on Windows. It includes a sample character, two rig modes, optional microphone gating, local profile storage, and transparent OBS output. No accounts or online processing are used.
 
@@ -53,7 +53,7 @@ Profiles using untouched sample artwork gain the missing sample slots when loade
 
 - PNG files must be readable, at most 20 MB, and at most 4096 × 4096 pixels.
 - **PNG poses:** center/neutral/resting is required. Direction, expression, and talking/blinking variants are optional. Direction has priority, followed by surprise, smile, and neutral. Missing variants fall back to available artwork.
-- **Layered rigs:** add body, head, eyes, brows, mouth, or accessory layers. Import matching transparent canvases for each layer's feature variants. Drag layers in edit mode, Shift-click to place the pivot, and adjust scale and draw order numerically. Eye, brow, and mouth movement inherits the head pivot. Body and accessories stay anchored.
+- **Layered rigs:** add body, head, eyes, brows, mouth, or accessory layers. Import matching transparent canvases for each layer's feature variants. Drag layers in edit mode, Shift-click to place the pivot, and adjust scale and draw order numerically. Eye, brow, and mouth movement inherits the head pivot. Accessories follow the body by default; choose **Accessory follows → Head** for hats or ears.
 - **Layer scaling:** The Scale slider resizes artwork around its image center. X/Y are saved corner coordinates, so they adjust as the image resizes. The slider limits its range to keep that center and valid profile coordinates; move an off-canvas layer inward if you need more scaling room. Existing profiles keep their saved placement.
 - Sprout's parts use a shared 1024 × 1024 transparent canvas. Imported layers initially fit within 850 pixels; adjust their scale and position to match your own art.
 - A single flat PNG supports position, rotation, and talking bounce. Additional artwork is needed to change the drawn eyes or mouth. Head turning cannot reconstruct a side view from front-facing artwork.
@@ -64,6 +64,17 @@ Profiles using untouched sample artwork gain the missing sample slots when loade
 Head angles now use MediaPipe's column-major camera transform consistently, including the visible head tilt when looking up or down while facing sideways. After upgrading, **calibrate neutral pose again** so your saved offsets match the corrected coordinates.
 
 In **Motion → Motion response**, **Mirror movement** reverses horizontal tracking, facing selection, and tilt. **Mirror avatar** flips the complete rendered artwork horizontally, including the body, accessories, and movement; it applies to both the studio and OBS. These are independent settings saved per avatar. Avatar mirroring defaults off for new and existing profiles. Webcam preview mirroring remains a separate studio-only control. Layer dragging and Shift-click pivot placement work in the reflected artwork view.
+
+## Cartoon animation (v0.4.0)
+
+In **Motion → Motion response**, **Cartoon animation** enables the new style. **Cartoon intensity** ranges from classic motion at 0% to the strongest accents at 100%; the default is 65%, including profiles created before this setting existed. The setting is saved per avatar. Motion strength still scales the overall response. **Full animation** under Try a movement loops through turns, speech, blinks, smile and surprise without needing a webcam; it affects the studio preview only.
+
+- Body squash/stretch uses reciprocal horizontal/vertical scales to preserve drawn area, anchored near the bottom of the body layer. The complete layered rig inherits it so the head stays attached. Speech and blinks add compression; surprise adds stretch and a head pop. Talking bounce controls speech-driven lift and rhythmic deformation.
+- Head movement uses damped springs for lag, overshoot and settling after starts/stops, with restrained turn/tilt exaggeration. Eyes, brows and mouth inherit the head and add smaller overlapping motion, blink compression, mouth stretch and raised-brow accents.
+- Accessories swing around their saved pivot. In Artwork & rig, choose whether an accessory follows the **Body** (ties/pendants) or **Head** (hats/ears), then place its pivot at the attachment point. Existing accessories remain body-attached. Artwork baked into a head/body PNG moves with that image; independent follow-through requires a separate layer.
+- Whole-image PNG poses receive squash/stretch, recoil and exaggerated head motion. Their individual facial features cannot move separately without layered artwork.
+
+Layer editing holds the rig still so positions and pivots remain easy to align. Tracking loss retains the existing hold/neutral recovery and lets secondary motion settle. Springs are calculated once in the studio and sent as bounded animation values to the shared desktop/OBS renderer; OBS does not run a separate physics simulation. Turning cartoon animation off restores the classic movement response. Try a lower intensity for rigid or tightly cropped artwork.
 
 ## Storage and recovery
 

@@ -1,10 +1,12 @@
 import { AnimationState, AvatarProfile, IDLE, Signals, TrackingFrame, ZERO } from './types';
 import { effectiveFacing,getLayerSlot,Facing } from './facing';
+import { CartoonMotion } from './cartoon';
 const keys=Object.keys(ZERO) as (keyof Signals)[];
 const clamp=(v:number,a:number,b:number)=>Math.max(a,Math.min(b,v));
 export class MotionEngine {
+  private cartoon=new CartoonMotion();
   private state:AnimationState={...IDLE}; private last=0; private lastTracked=-Infinity; private held:Signals={...ZERO};
-  reset(){this.state={...IDLE};this.last=0;this.lastTracked=-Infinity;this.held={...ZERO};}
+  reset(){this.state={...IDLE};this.last=0;this.lastTracked=-Infinity;this.held={...ZERO};this.cartoon.reset();}
   step(frame:TrackingFrame,profile:AvatarProfile):AnimationState {
     const t=frame.timestamp,dt=this.last?clamp(t-this.last,0,100):33;this.last=t;
     let target:Signals={...ZERO};
@@ -25,6 +27,7 @@ export class MotionEngine {
     next.blinking=Math.min(next.blinkLeft,next.blinkRight)>(this.state.blinking?.35:.6);
     const surprise=next.brow>(this.state.expression==='surprise'?.35:.55)&&next.mouth>.28;
     next.expression=surprise?'surprise':next.smile>(this.state.expression==='smile'?.25:.45)?'smile':'neutral';
+    next.cartoon=this.cartoon.step(next,profile.settings,dt);
     this.state=next;return {...next};
   }
 }

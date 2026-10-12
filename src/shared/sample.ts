@@ -29,7 +29,7 @@ function featureVariants(role: Layer['role']) {
 export function sampleProfile(id = 'sample'): AvatarProfile {
   return { version: 1, id, name: 'Sprout', mode: 'layered', poses: samplePoses(),
     layers: (['body', 'head', 'eyes', 'brows', 'mouth'] as const).map((role, order) => layer(role, role, order, featureVariants(role))),
-    settings: { sensitivity: 1, smoothing: 75, strength: 1, directionalStates: true, bounce: true, mirror: true, mirrorAvatar: false, micThreshold: .025 },
+    settings: { sensitivity: 1, smoothing: 75, strength: 1, cartoon: .65, directionalStates: true, bounce: true, mirror: true, mirrorAvatar: false, micThreshold: .025 },
     calibration: { neutral: { ...ZERO }, completed: false } };
 }
 

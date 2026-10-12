@@ -20,7 +20,7 @@ const fs = require('node:fs/promises'), path = require('node:path'), assert = re
     assert.equal(await page.locator('.brand b').innerText(), 'sprout.');
     assert(!(await page.locator('body').innerText()).includes('Luma'));
     const { poses, layers, ...savedFields } = oldProfile;
-    savedFields.settings = { mirrorAvatar: false, ...savedFields.settings };
+    savedFields.settings = { cartoon: .65, mirrorAvatar: false, ...savedFields.settings };
     const { poses: currentPoses, layers: currentLayers, ...currentFields } = config.active;
     assert.deepEqual(currentFields, savedFields);
     assert.deepEqual(currentLayers.map(({ variants, ...geometry }) => geometry), layers.map(({ variants, ...geometry }) => geometry));
