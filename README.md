@@ -1,6 +1,6 @@
 # Sprout — local PNGtuber studio
 
-Previously named Luma. Sprout v0.4.0 adds cartoon animation: body squash/stretch, springy head and accessory follow-through, facial overlap, and expression accents. It retains the installer upgrade repair, sideways-nod correction, avatar mirroring, and complete center/left/right artwork banks.
+Previously named Luma. Sprout v0.4.1 fixes camera/microphone discovery and selection on systems with multiple inputs. It includes cartoon animation, the installer upgrade repair, sideways-nod correction, avatar mirroring, and complete center/left/right artwork banks.
 
 Sprout turns ordinary webcam movements into a PNG avatar on Windows. It includes a sample character, two rig modes, optional microphone gating, local profile storage, and transparent OBS output. No accounts or online processing are used.
 
@@ -21,6 +21,14 @@ Build the Windows installer with `pnpm run package`, or download a published ins
 5. In **Stream output**, copy the source URL. In OBS, add a Browser source, paste the URL, and use 1024 × 1024 at 60 FPS. Keep Sprout open while streaming. OBS receives only the avatar.
 
 Enable **Microphone assist** only if you want audio activity to gate talking animation. Webcam-only mode detects visible mouth opening; it cannot distinguish speech from yawning. Adjust the audio threshold if quiet speech or background noise activates it incorrectly.
+
+## Camera and microphone selection (v0.4.1)
+
+In **Studio → Your camera**, select **Video input** before starting capture. Camera names and additional inputs now appear without first opening the system default device. **Audio input** is also available before enabling **Microphone assist**, so you can choose your preferred microphone before it opens. Selecting inputs or refreshing the list does not start capture. Microphone assistance remains off until explicitly enabled.
+
+Use **Refresh devices** after connecting inputs or changing Windows privacy settings. Sprout also refreshes on device changes and capture state changes. A disconnected selected input stays identified as disconnected rather than silently switching to the system default. Discovery failures show a recovery message. If Windows hides devices, check **Settings → Privacy & security → Camera / Microphone → Let desktop apps access…**, then refresh. Capture-card and virtual-camera entries are kept alongside webcams.
+
+This fixes [issue #1](https://github.com/wxyz404/sprout-pngtuber/issues/1). Electron's permission-check origin included a trailing slash that did not match Sprout's stored origin string. The permission handler now compares parsed URL origins while requiring the exact authenticated studio main-frame URL. The OBS page cannot enumerate named devices or request capture.
 
 ## Webcam monitor (v0.2.0)
 
